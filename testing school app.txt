@@ -1,0 +1,134 @@
+ private Form current;
+    private HomeworkService homeworkService = new HomeworkService();
+    //private NotificationsService notificationsService = new NotificationsService();
+    java.util.List<Homework> homework;
+    //java.util.List<Notifications> notifications;
+    Object context;
+    Homework work = new Homework();
+    //Notifications myNotifications = new Notifications();
+
+    public void init(Object context) {
+        try {
+            Resources theme = Resources.openLayered("/theme");
+            this.context = context;
+            UIManager.getInstance().setThemeProps(theme.getTheme(theme.getThemeResourceNames()[0]));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Pro users - uncomment this code to get crash reports sent to you automatically
+        /*Display.getInstance().addEdtErrorHandler(new ActionListener() {
+         public void actionPerformed(ActionEvent evt) {
+         evt.consume();
+         Log.p("Exception in AppName version " + Display.getInstance().getProperty("AppVersion", "Unknown"));
+         Log.p("OS " + Display.getInstance().getPlatformName());
+         Log.p("Error " + evt.getSource());
+         Log.p("Current Form " + Display.getInstance().getCurrent().getName());
+         Log.e((Throwable)evt.getSource());
+         Log.sendLog();
+         }
+         });*/
+    }
+
+    public void start() {
+        if (current != null) {
+            current.show();
+            return;
+        }
+         final Form myForm = new Form("");
+         myForm.setLayout(new BorderLayout());
+        
+        
+        final Form form = new Form("");
+        Container cn = new Container();
+        
+        MultiList list = new MultiList();
+        cn.setLayout(new BorderLayout());
+        form.setLayout(new BorderLayout());
+        homework  = homeworkService.findHomework();
+        //list.setModel(new DefaultListModel (homework));
+        list.setModel(new DefaultListModel (studHomework()));
+        /*list.addSelectionListener(new SelectionListener() {
+            
+
+
+            @Override
+            public void selectionChanged(int oldSelected, int newSelected) {
+               // list.setModel(new DefaultListModel (homework));
+                   // work = homework.get(oldSelected);
+                     myForm.addComponent(BorderLayout.CENTER, theHomework());
+                    myForm.show();
+                
+                      }
+        });*/
+        list.addActionListener(new ActionListener() {
+
+          public void actionPerformed(ActionEvent evt) {
+                 myForm.addComponent(BorderLayout.CENTER, theHomework());
+                    myForm.show();
+                 
+            }
+        });
+        
+        cn.addComponent(BorderLayout.CENTER, list);
+        form.addComponent(BorderLayout.CENTER, cn);
+        
+        form.show();
+        
+        
+      /* final Form form2 = new Form("Details");
+
+        form2.setLayout(new BorderLayout());
+                final TextArea txt = new TextArea();
+                Button showStudent = new Button("Student");
+                showStudent.addActionListener(new ActionListener() {
+
+                    public void actionPerformed(ActionEvent evt) {
+
+                        List<Homework> showHomework = new ArrayList<Homework>();
+                        service.setContext(context);
+                        showHomework = service.findHomework();
+                        Homework homework = showHomework.get(0);
+
+                        txt.setText(homework.getSubject() + " " + homework.getDueDate() + " " + homework.getUsername() + " " + homework.getTeacher());
+                    }
+                });
+                form2.addComponent(BorderLayout.CENTER, txt);
+                form2.addComponent(BorderLayout.SOUTH, showStudent);
+                form2.show();*/
+    }
+    
+    private Container theHomework(){
+        Container c = new Container();    
+          BrowserComponent web = new BrowserComponent();
+          web.setPage(work.createHTML(), "http://localhost");
+          
+          c.addComponent(web);
+          return c;
+    }
+    
+    public Vector studHomework(){
+        
+        homework = new ArrayList<Homework>();
+                        homeworkService.setContext(context);
+                        homework = homeworkService.findHomework();
+                        work = homework.get(0);
+        
+        Vector vec = new Vector();
+        
+        Hashtable h = new Hashtable();
+        h.put("Line1", work.getSubject());
+        h.put("Line2", work.getAssignedDate());
+        
+        vec.addElement(h);
+        
+        return vec;
+    }
+
+    public void stop() {
+        current = Display.getInstance().getCurrent();
+    }
+
+    public void destroy() {
+    }
+
+}

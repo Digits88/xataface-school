@@ -1,0 +1,7 @@
+The json that is retrieved from the webservice must be loaded into into the list.
+When the list is clicked another form should be opened that will display the information.
+
+You can get ideas from existing apps.
+There are some web services that are on our servers that already generate the json.
+
+On your machine there are apps that can help you with that as well. Remember to place comments on the progress. 
