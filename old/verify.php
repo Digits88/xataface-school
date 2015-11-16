@@ -19,9 +19,12 @@ $result=mysqli_query($con, $sql);
 // Mysql_num_row is counting table row
 $count=mysqli_num_rows($result);
 // If result matched $username and $password, table row must be 1 row
-if($count == 1){
+if($count==1){
     $row = mysqli_fetch_assoc($result);
-    if ($password == $row['password']){ 
+    //(crypt($password, $row['password']) == $row['password'])
+    if ($password == $row['password']){
+        //session_register("username");
+        //session_register("password"); 
         $response['success'] = 1;
         echo "Login Successful";
         return true;

@@ -1,3 +1,5 @@
 <?php
-require_once '../social-network-svr/xataface/dataface-public-api.php';
-df_init(__FILE__, 'http://localhost/social-network-svr/xataface')->display();
+//require_once 'xataface/public-api.php';
+require_once 'config.inc.php';
+$app->display();
+?>
