@@ -1,5 +1,5 @@
 <?php
-
+require_once 'snippets/functions.inc.php';
 /**
  * A delegate class for the entire application to handle custom handling of 
  * some functions such as permissions and preferences.
@@ -13,19 +13,32 @@ class conf_ApplicationDelegate {
      * @see Dataface_PermissionsTool
      * @see Dataface_AuthenticationTool
      */
-	 
+
+
+function getPermissions($record){
+
+
+    $user = Dataface_AuthenticationTool::getInstance()->getLoggedInUser();
+    if ( $user and $user->val('role') == 'ADMIN' ){
+        return Dataface_PermissionsTool::getRolePermissions('ADMIN');
+    } else {
+        return Dataface_PermissionsTool::NO_ACCESS();
+    }
+}
+
+/*	 
      function getPermissions(Dataface_Record $record = null){
       //return Dataface_PermissionsTool::getRolePermissions('USER');
       //$auth =& Dataface_AuthenticationTool::getInstance();
     $user =& Dataface_AuthenticationTool::getInstance()->getLoggedInUser();
     
-    if ( $user and $user->val('role') == 'admin'){
+    if ( $user and $user->val('role') == 'ADMIN'){
         $role = $user->val('role');
         return Dataface_PermissionsTool::getRolePermissions($role);
     }
     return Dataface_PermissionsTool::NO_ACCESS();
 }
-      
+*/      
 function getPreferences(){
         $app =& Dataface_Application::getInstance();
         $auth =& Dataface_AuthenticationTool::getInstance();
@@ -52,6 +65,17 @@ function getPreferences(){
         
       }      
       
+  function beforeHandleRequest(){
+        
+        $app =& Dataface_Application::getInstance();
+    $query =& $app->getQuery();
+    if ( $query['-table'] == 'dashboard' and ($query['-action'] == 'browse' or $query['-action'] == 'list') ){
+        $query['-action'] = 'dashboard';
+    }
+        
+        
+    }
+
  }     
  
 ?>

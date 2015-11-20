@@ -1,0 +1,40 @@
+{use_macro file="Dataface_Main_Template.html"}
+    {fill_slot name="main_column"}
+        <h1>Welcome to the CrestERP Homework Management System </h1>
+        
+        <p>This system allows you to manage your homework exercises and publish
+        them on the web.  Some common actions you may perform with this system
+        include:
+            <ul>
+                <li><img src="{$ENV.DATAFACE_URL}/images/add_icon.gif"/>
+                    <a href="{$ENV.DATAFACE_SITE_HREF}?-table=homework&-action=new">
+                        Create New Homework</a>
+                </li>
+                <li><img src="{$ENV.DATAFACE_URL}/images/edit.gif"/> 
+                   Edit existing homework: 
+                   <select onchange="window.location.href=this.options[this.selectedIndex].value">
+                    <option value="">Select ...</option>
+                    {foreach from=$homework item=work}
+                        <option value="{$homework->getURL('-action=edit')}">
+                            {$homework->getTitle()}
+                        </option>
+                    
+                    {/foreach}
+                </select>
+                </li>
+                <li><img src="{$ENV.DATAFACE_URL}/images/file.gif"/> 
+                    Embed your bibliography in a webpage:
+                    <select onchange="window.location.href=this.options[this.selectedIndex].value">
+                    <option value="">Select ...</option>
+                    {foreach from=$bibliographies item=bibliography}
+                        <option value="{$bibliography->getURL('-action=view')}#embed">
+                            {$bibliography->getTitle()}
+                        </option>
+                    
+                {/foreach}
+                </select>
+                </li>
+                
+            </ul></p>
+    {/fill_slot}
+{/use_macro}
